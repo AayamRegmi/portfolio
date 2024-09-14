@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Alata&display=swap');
+
+.navigation {
+    display: flex; 
+    justify-content: space-between;
+    align-items: center;
+
+    width: 100%; 
+    padding: 10px 20px; 
+    position: relative; 
+    top: 0; 
+    left: 0;  
+    right: 0;  
+    box-sizing: border-box; 
+}
+
+.github, .linkedin {
+    height: 30px;
+    width: 30px;
+    padding: 5px;
+}
+
+.githublink, .linkedinlink {
+    text-decoration: none; /* Remove anchor tag underline */
+}
+
+.AayamRegmi a {
+    color: white; /* Set the color for the Aayam part */
+    text-decoration: none; /* Ensure no underline */
+}
+
+.AayamRegmi {
+    color: white;
+    font-family: "Alata", sans-serif;
+    font-size: 20px;
+    padding-inline: 2px;
+    transition: all 0.3s ease-in-out;
+}
+
+
+.Regmi {
+    color: #7289da;
+}
+
+.socials {
+    display: flex; /* Ensure icons are displayed in a row */
+    gap: 10px; /* Add space between icons */
+}
+
+.socials a img {
+    transition: all 0.3s ease-in-out; 
+}
+
+.socials a:hover img {
+    filter: drop-shadow(0 0 4px #fff) drop-shadow(0 0 8px #7289da) drop-shadow(0 0 12px #7289da);
+}

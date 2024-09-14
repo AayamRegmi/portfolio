@@ -1,0 +1,13 @@
+
+.skills{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white; 
+    font-family: "Alata", sans-serif;
+    padding-top: 20px
+}
+
+.highlight {
+    color: #ff3f3f;
+}
