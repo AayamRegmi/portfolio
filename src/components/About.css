@@ -142,3 +142,71 @@
     border: 1px solid #7289da;
     margin: 0 auto; 
 }
+
+@media (max-width: 768px) {
+    .aboutme {
+        flex-direction: column; /* Stack items vertically on medium screens */
+        align-items: center; /* Center align items */
+        padding-top: 50px; /* Adjust padding for smaller screens */
+    }
+
+    .photocontainer {
+        order: 2; /* Move photo container below the text */
+        margin-top: 20px; /* Space above photo container */
+    }
+
+    .photo {
+        width: 300px; /* Adjust photo size for medium screens */
+        height: 300px;
+    }
+
+    .AayamRegmi2 {
+        font-size: 40px; /* Smaller font size for medium screens */
+    }
+
+    .CV {
+        padding: 10px 15px; /* Adjust padding for medium screens */
+    }
+
+    .background {
+        padding-left: 10px; /* Adjust padding for medium screens */
+    }
+
+    .socials2, .socials3 {
+        gap: 15px; /* Adjust gap for smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .aboutme {
+        flex-direction: column; /* Stack items vertically on small screens */
+        align-items: center; /* Center align items */
+        padding-top: 30px; /* Further reduced padding for small screens */
+    }
+
+    .photocontainer {
+        order: 2; /* Move photo container below the text */
+        margin-top: 15px; /* Space above photo container */
+    }
+
+    .photo {
+        width: 200px; /* Smaller photo size for small screens */
+        height: 200px;
+    }
+
+    .AayamRegmi2 {
+        font-size: 30px; /* Smaller font size for small screens */
+    }
+
+    .CV {
+        padding: 8px 10px; /* Reduced padding for small screens */
+    }
+
+    .background {
+        padding-left: 5px; /* Further reduced padding for small screens */
+    }
+
+    .socials2, .socials3 {
+        gap: 10px; /* Smaller gap for small screens */
+    }
+}
