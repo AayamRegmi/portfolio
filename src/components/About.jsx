@@ -38,7 +38,7 @@ function About(){
                 <h3 className='full'>Fullstack | Machine Learning</h3>
                 <div className="mainbackground">
                     <p>• Background in web, software</p>
-                    <p>• Working towards Bachelors in honors Computing at <a href="https://www.thebritishcollege.edu.np/" target="_blank" rel="noopener noreferrer">The British College</a></p>
+                    <p>• Working towards Bachelors in honors Computing at <a href="https://www.thebritishcollege.edu.np/" target="_blank">The British College</a></p>
                     <p>• Great interest and currently studying Machine Learning</p>
                     <p>• Open to Internships and job offers
                     </p>
