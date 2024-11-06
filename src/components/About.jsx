@@ -1,7 +1,7 @@
 import React from 'react';
 import Aayam_photo from './icons/AayamRegmi.jpg';
 import './About.css'
-
+import cv from './icons/ACV.pdf'
 import { FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
 
 function About(){
@@ -18,7 +18,7 @@ function About(){
                 <img className="aayamphoto" src={Aayam_photo}/>
             </div>
             <div className="socials2">
-                <a href='' target="_blank" rel="noopener noreferrer"><p className='CV'>CV</p></a>
+                <a href={cv} target="_blank" rel="noopener noreferrer"><p className='CV'>CV</p></a>
             </div>
             </div>
             <div className="background">
