@@ -1,3 +1,43 @@
-body{
-    flex-wrap: wrap;
+html {
+  scroll-behavior: smooth;
+  scroll-padding-bottom: 3.2rem; /* Matching the body padding */
+}
+
+/* Optional: Add an active class that can be applied via JavaScript */
+.active-section {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+body {
+  flex-wrap: wrap;
+  padding-bottom: 3.2rem !important; /* Just enough for the nav bar */
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Adjust these to further minimize bottom spacing */
+section:last-of-type, 
+div.skills-section, 
+footer, 
+.skills-container {
+  margin-bottom: 1rem !important; /* Significantly reduced margin */
+}
+
+/* Remove the larger margin that's creating extra space */
+.skills-container > *:last-child {
+  margin-bottom: 1rem !important; /* Reduced from 4.5rem */
+}
+
+/* Additional rule to ensure minimal spacing */
+.skills-section {
+  margin-bottom: 1rem !important;
 }
