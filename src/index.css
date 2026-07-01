@@ -1,4 +1,55 @@
 :root {
-  background-color: #101820;
+  /* PostHog-inspired warm "desktop" palette */
+  --bg:          #EEECE2;
+  --bg-alt:      #E7E2D4;
+  --ink:         #1A1A1A;
+  --paper:       #FDFCF8;
+  --paper-alt:   #F4F1E9;
+  --muted:       #6B6656;
+  --line:        #D9D3C4;
 
+  --accent:        #EB9D2A;  /* warm orange */
+  --accent-strong: #F54E00;  /* PostHog red */
+  --blue:          #2F6FED;
+  --green:         #4FA85A;
+  --yellow:        #F5B93B;
+
+  --dot-r: #E06A4A;
+  --dot-y: #E8B64A;
+  --dot-g: #5FAE63;
+
+  --shadow:    6px 7px 0 rgba(26, 26, 26, 0.12);
+  --shadow-sm: 3px 4px 0 rgba(26, 26, 26, 0.12);
+  --shadow-lg: 9px 11px 0 rgba(26, 26, 26, 0.13);
+
+  --radius:    16px;
+  --radius-sm: 10px;
+
+  --font: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+  --hand: 'Gaegu', 'Comic Sans MS', cursive;
+
+  color-scheme: light;
 }
+
+* { box-sizing: border-box; }
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  overflow: hidden; /* the desktop is the viewport; windows scroll internally */
+  font-family: var(--font);
+  color: var(--ink);
+  background-color: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a { color: inherit; }
+
+img { max-width: 100%; display: block; }
+
+::selection { background: var(--accent); color: #fff; }

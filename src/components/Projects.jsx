@@ -1,244 +1,170 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './Projects.css';
-import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
+import { FaGithub, FaExternalLinkAlt, FaLayerGroup } from 'react-icons/fa';
+import piano1 from './icons/PianoFingerTracking1.jpg';
+import piano2 from './icons/PianoFingerTracking2.png';
+import tree1 from './icons/TreeTrackingHardware1.webp';
+import tree2 from './icons/TreeTrackingHardware2.webp';
 
-function Projects() {
-    const [projects, setProjects] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const GITHUB_USERNAME = 'AayamRegmi'; 
+/*
+ * Curated case studies — the story behind the work, not just the repo.
+ * Fill each entry in with the real details of what you did.
+ *   tag      short category shown top-left
+ *   role     your role on the project
+ *   period   when
+ *   stack    technologies (chips)
+ *   points   bullet list of what you actually did / built / learned
+ *   links    { github, live } (either optional)
+ */
+const WORK = [
+  {
+    id: 'piano-tracking',
+    title: 'Vision-Based Finger Tracking for Piano Interaction',
+    tag: 'Research · Computer Vision',
+    tagline: 'Benchmarking pose-estimation models for real-time piano key-press detection.',
+    role: 'Lead Researcher — The British College / Leeds Beckett',
+    period: '2024 — 2025',
+    stack: ['Python', 'MediaPipe', 'OpenPose', 'OpenCV', 'MPJPE'],
+    images: [piano1, piano2],
+    points: [
+      'Benchmarked MediaPipe vs OpenPose (Convolutional Pose Machines) for real-time key-press detection via pose estimation and geometric containment.',
+      'Built a custom MIDI–video synchronisation pipeline and collected a dataset of 38 sessions / 4,777 annotated note-on events with skin-type, hand-size and illuminance metadata.',
+      'Proposed a horizontal-axis MPJPE metric for lateral fingertip precision; achieved 63.3% polygon hit rate (MediaPipe) vs 8.1% (OpenPose).',
+      'Identified a left–right hand detection asymmetry (95.8% vs 53.2%). Manuscript in preparation for conference submission.',
+    ],
+    links: {},
+  },
+  {
+    id: 'tree-conservation',
+    title: 'Tree Conservation Monitoring System',
+    tag: 'IoT · 1st Place 🏆',
+    tagline: 'Handheld GPS + barcode device that gives every tree an offline field record.',
+    role: 'International Student Exchange Programme — Winning Team',
+    period: '2024',
+    stack: ['Arduino (C++)', 'NEO-6M GPS', 'UART / I2C / SPI', 'MicroSD', 'OLED'],
+    images: [tree1, tree2],
+    points: [
+      'Designed and assembled a battery-powered IoT device around an Arduino Mega ADK: NEO-6M GPS, UART 2D barcode scanner, SSD1306 OLED, MicroSD reader and a 4-key input board across UART, I2C and SPI buses.',
+      'Captures GPS coordinates, timestamps and per-tree field metrics; logs to MicroSD for offline resilience and syncs to a central database for persistent history.',
+      'Deployed physical barcodes on trees — scanning one instantly retrieves that tree’s full record on the OLED, with no network required at scan time.',
+      'Won 1st place among the International Student Exchange Programme project competition.',
+    ],
+    links: { github: 'https://github.com/AayamRegmi/Tree-Barcode-Tracking' },
+  },
+  {
+    id: 'credit-default',
+    title: 'Credit Card Default Prediction',
+    tag: 'Machine Learning',
+    tagline: 'Classification models predicting credit-card default on the UCI dataset.',
+    role: 'Machine Learning project',
+    period: '2023',
+    stack: ['Python', 'scikit-learn', 'Pandas', 'NumPy', 'Matplotlib'],
+    points: [
+      'Built and compared Random Forest, Logistic Regression, SVM and Gradient Boosting — reaching 92% accuracy with Random Forest.',
+      'Applied feature engineering and SMOTE oversampling to handle class imbalance.',
+      'Used cross-validated hyperparameter tuning to select and evaluate the final model.',
+    ],
+    links: {},
+  },
+  {
+    id: 'fullstack-intern',
+    title: 'Full-Stack Software Developer (Internship)',
+    tag: 'Fullstack · Work',
+    tagline: 'Production backend + frontend work at Professional Computer Systems.',
+    role: 'Intern — Professional Computer Systems, Kathmandu',
+    period: 'Nov 2024 — Mar 2025',
+    stack: ['Spring Boot', 'Spring Security', 'PostgreSQL', 'React', 'REST'],
+    points: [
+      'Developed RESTful backend services and authentication flows with Spring Boot and Spring Security over a PostgreSQL database.',
+      'Built responsive frontend components in ReactJS.',
+      'Collaborated on the production deployment pipeline within an existing team codebase.',
+    ],
+    links: { github: 'https://github.com/AayamRegmi/Task-Manager-Todo' },
+  },
+  {
+    id: 'ehudder',
+    title: 'eHudder sBasket',
+    tag: 'E-commerce',
+    tagline: 'Full e-commerce platform with buyer, seller and admin roles.',
+    role: 'Solo build',
+    period: 'University project',
+    stack: ['PHP', 'Oracle DB', 'PayPal API'],
+    points: [
+      'Built cart, checkout and PayPal payment integration from scratch.',
+      'Separate seller and admin panels with sales dashboards.',
+      'Backed by an Oracle database with role-based access.',
+    ],
+    links: { github: 'https://github.com/AayamRegmi/eHudder-sBasket' },
+  },
+];
 
-    useEffect(() => {
-        fetchGitHubProjects();
-    }, []);
-
-    const fetchGitHubProjects = async () => {
-        try {
-            setLoading(true);
-            setError(null);
-
-            const response = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=6`);
-
-            if (!response.ok) {
-                throw new Error(`GitHub API error: ${response.status}`);
-            }
-
-            const repos = await response.json();
-            
-            const filteredRepos = repos.filter(repo => !repo.fork && !repo.archived);
-            
-            // Transform the data with OpenGraph images
-            const transformedProjects = filteredRepos.map(repo => ({
-                id: repo.id,
-                name: repo.name,
-                description: repo.description || 'No description available',
-                html_url: repo.html_url,
-                homepage: repo.homepage,
-                language: repo.language,
-                // Use GitHub OpenGraph image with a random hash for cache busting
-                image: `https://opengraph.githubassets.com/default/${GITHUB_USERNAME}/${repo.name}`
-            }));
-
-            setProjects(transformedProjects);
-        } catch (err) {
-            console.error('Error fetching GitHub projects:', err);
-            setError(err.message);
-            // Fallback to sample data if API fails
-            setProjects(sampleProjects);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // Generate a random hash for the OpenGraph URL
-    const generateRandomHash = () => {
-        return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    };
-
-    const generateProjectImage = (projectName, language) => {
-        const colors = {
-            JavaScript: '7289da',
-            Python: '4CAF50',
-            TypeScript: 'FF9800',
-            'Node.js': '2196F3',
-            React: '9C27B0',
-            HTML: 'E91E63',
-            CSS: '00BCD4',
-            Java: 'F44336',
-            'C++': '673AB7',
-            'C#': '3F51B5'
-        };
-        
-        const color = colors[language] || '7289da';
-        const encodedName = encodeURIComponent(projectName.replace(/[-_]/g, ' '));
-        
-        return `https://via.placeholder.com/400x200/${color}/ffffff?text=${encodedName}`;
-    };
-
-    // Sample projects as fallback with OpenGraph images
-    const sampleProjects = [
-        {
-            id: 1,
-            name: "Portfolio Website",
-            description: "A modern portfolio website built with React and Vite, featuring responsive design and smooth animations.",
-            html_url: "https://github.com/AayamRegmi/portfolio",
-            homepage: "https://aayamregmi.github.io/portfolio",
-            language: "JavaScript",
-            image: `https://opengraph.githubassets.com/${generateRandomHash()}/AayamRegmi/portfolio`
-        },
-        {
-            id: 2,
-            name: "Machine Learning Project",
-            description: "A comprehensive machine learning project implementing various algorithms for data analysis and prediction.",
-            html_url: "https://github.com/AayamRegmi/ml-project",
-            homepage: null,
-            language: "Python",
-            image: `https://opengraph.githubassets.com/${generateRandomHash()}/AayamRegmi/ml-project`
-        },
-        {
-            id: 3,
-            name: "Web Application",
-            description: "A full-stack web application with modern UI/UX design and robust backend functionality.",
-            html_url: "https://github.com/AayamRegmi/web-app",
-            homepage: "https://mywebapp.com",
-            language: "TypeScript",
-            image: `https://opengraph.githubassets.com/${generateRandomHash()}/AayamRegmi/web-app`
-        },
-        {
-            id: 4,
-            name: "Mobile App",
-            description: "Cross-platform mobile application built with React Native for both iOS and Android platforms.",
-            html_url: "https://github.com/AayamRegmi/mobile-app",
-            homepage: null,
-            language: "JavaScript",
-            image: `https://opengraph.githubassets.com/${generateRandomHash()}/AayamRegmi/mobile-app`
-        },
-        {
-            id: 5,
-            name: "API Server",
-            description: "RESTful API server with authentication, database integration, and comprehensive documentation.",
-            html_url: "https://github.com/AayamRegmi/api-server",
-            homepage: null,
-            language: "Node.js",
-            image: `https://opengraph.githubassets.com/${generateRandomHash()}/AayamRegmi/api-server`
-        },
-        {
-            id: 6,
-            name: "Data Visualization",
-            description: "Interactive data visualization dashboard using D3.js and modern web technologies.",
-            html_url: "https://github.com/AayamRegmi/data-viz",
-            homepage: "https://dataviz.example.com",
-            language: "JavaScript",
-            image: `https://opengraph.githubassets.com/${generateRandomHash()}/AayamRegmi/data-viz`
-        }
-    ];
-
-    const getLanguageColor = (language) => {
-        const colors = {
-            JavaScript: '#f7df1e',
-            Python: '#3776ab',
-            TypeScript: '#3178c6',
-            'Node.js': '#339933',
-            React: '#61dafb',
-            HTML: '#e34f26',
-            CSS: '#1572b6',
-            Java: '#ED8B00',
-            'C++': '#00599C',
-            'C#': '#239120'
-        };
-        return colors[language] || '#7289da';
-    };
-
-    if (loading) {
-        return (
-            <div className="projects-loading">
-                <div className="spinner"></div>
-                <p>Loading projects from GitHub...</p>
-            </div>
-        );
-    }
-
-    if (error && projects.length === 0) {
-        return (
-            <div className="projects-error">
-                <h3>Error loading projects</h3>
-                <p>{error}</p>
-                <button onClick={fetchGitHubProjects} className="retry-button">
-                    Try Again
-                </button>
-            </div>
-        );
-    }
-
-    return (
-        <div className="projects-section" id="projects">
-            <h2 className="projects-title">My Projects</h2>
-            <p className="projects-subtitle">Here are some of my recent projects from GitHub</p>
-            
-            {error && (
-                <div className="projects-warning">
-                    <p>⚠️ Using sample data due to API error: {error}</p>
-                </div>
-            )}
-            
-            <div className="projects-grid">
-                {projects.map((project) => (
-                    <div key={project.id} className="project-card">
-                        <div className="project-image">
-                            <img
-                              src={project.image}
-                              alt={project.name}
-                              onError={e => { e.target.onerror = null; e.target.src = generateProjectImage(project.name, project.language); }}
-                            />
-                            <div className="project-overlay">
-                                <div className="project-links">
-                                    <a 
-                                        href={project.html_url} 
-                                        target="_blank" 
-                                        rel="noopener noreferrer" 
-                                        className="project-link github-link"
-                                        title="View on GitHub"
-                                    >
-                                        <FaGithub size={20} />
-                                    </a>
-                                    {project.homepage && (
-                                        <a 
-                                            href={project.homepage} 
-                                            target="_blank" 
-                                            rel="noopener noreferrer" 
-                                            className="project-link demo-link"
-                                            title="Live Demo"
-                                        >
-                                            <FaExternalLinkAlt size={18} />
-                                        </a>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div className="project-content">
-                            <h3 className="project-name">{project.name}</h3>
-                            <p className="project-description">{project.description}</p>
-                            
-                            <div className="project-stats">
-                                <div className="project-language">
-                                    {project.language && (
-                                        <>
-                                            <span 
-                                                className="language-dot" 
-                                                style={{ backgroundColor: getLanguageColor(project.language) }}
-                                            ></span>
-                                            {project.language}
-                                        </>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                ))}
-            </div>
+function WorkCard({ item }) {
+  return (
+    <article className="work-card">
+      <div className="work-card__top">
+        <span className="work-card__tag">{item.tag}</span>
+        <div className="work-card__links">
+          {item.links?.github && (
+            <a className="icon-btn" href={item.links.github} target="_blank" rel="noopener noreferrer" title="Source">
+              <FaGithub />
+            </a>
+          )}
+          {item.links?.live && (
+            <a className="icon-btn" href={item.links.live} target="_blank" rel="noopener noreferrer" title="Live">
+              <FaExternalLinkAlt />
+            </a>
+          )}
         </div>
-    );
+      </div>
+
+      <h3 className="work-card__title">{item.title}</h3>
+      <p className="work-card__tagline">{item.tagline}</p>
+
+      {item.images?.length > 0 && (
+        <div className={`work-card__media work-card__media--${item.images.length}`}>
+          {item.images.map((src, i) => (
+            <a
+              key={i}
+              className="work-card__shot"
+              href={src}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Open image"
+            >
+              <img src={src} alt={`${item.title} — screenshot ${i + 1}`} loading="lazy" />
+            </a>
+          ))}
+        </div>
+      )}
+
+      <div className="work-card__facts">
+        <span><strong>Role</strong> {item.role}</span>
+        <span><strong>When</strong> {item.period}</span>
+      </div>
+
+      <ul className="work-card__points">
+        {item.points.map((p, i) => <li key={i}>{p}</li>)}
+      </ul>
+
+      <div className="work-card__stack">
+        {item.stack.map((s) => <span className="work-chip" key={s}>{s}</span>)}
+      </div>
+    </article>
+  );
 }
 
-export default Projects;
+function ProjectsContent() {
+  return (
+    <div className="work">
+      <div className="work__head">
+        <h2 className="work__title"><FaLayerGroup /> Projects</h2>
+        <p className="work__sub">Selected work, with the story behind it.</p>
+      </div>
+      <div className="work__list">
+        {WORK.map((item) => <WorkCard key={item.id} item={item} />)}
+      </div>
+    </div>
+  );
+}
+
+export default ProjectsContent;

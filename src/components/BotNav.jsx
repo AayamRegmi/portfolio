@@ -1,53 +1,39 @@
 import React from 'react';
-import { FaUser, FaFileAlt, FaGraduationCap, FaBriefcase, FaCode } from 'react-icons/fa';
+import { FaUser, FaCode, FaLayerGroup, FaGithub, FaPenNib, FaFilePdf, FaGraduationCap } from 'react-icons/fa';
 import './BotNav.css';
+import { useWindows } from './WindowManager';
+
+const ITEMS = [
+  { id: 'hello', label: 'About', icon: <FaUser /> },
+  { id: 'resume', label: 'CV', icon: <FaFilePdf /> },
+  { id: 'education', label: 'Education', icon: <FaGraduationCap /> },
+  { id: 'skills', label: 'Skills', icon: <FaCode /> },
+  { id: 'projects', label: 'Projects', icon: <FaLayerGroup /> },
+  { id: 'github', label: 'GitHub', icon: <FaGithub /> },
+  { id: 'blog', label: 'Blog', icon: <FaPenNib /> },
+];
 
 function BotNav() {
-  // Function for smooth scrolling
-  const scrollToSection = (e, id) => {
-    e.preventDefault();
-    const element = document.getElementById(id);
-    
-    if (element) {
-      // Get the navbar height to offset scroll position
-      const navbar = document.querySelector('.navbar');
-      const navbarHeight = navbar ? navbar.offsetHeight : 0;
-      
-      const yOffset = -navbarHeight - 20; // Additional 20px buffer
-      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      
-      window.scrollTo({
-        top: y,
-        behavior: 'smooth'
-      });
-    }
-  };
+  const { state, open } = useWindows();
 
   return (
-    <div className="bot-nav">
-      <div className="bot-nav-container">
-        <a href="#about" className="bot-nav-item" onClick={(e) => scrollToSection(e, 'about')}>
-          <FaUser className="bot-nav-icon" />
-          <span className="bot-nav-text">About</span>
-        </a>
-        <a href="#cv" className="bot-nav-item" onClick={(e) => scrollToSection(e, 'cv')}>
-          <FaFileAlt className="bot-nav-icon" />
-          <span className="bot-nav-text">CV</span>
-        </a>
-        <a href="#education" className="bot-nav-item" onClick={(e) => scrollToSection(e, 'education')}>
-          <FaGraduationCap className="bot-nav-icon" />
-          <span className="bot-nav-text">Education</span>
-        </a>
-        <a href="#projects" className="bot-nav-item" onClick={(e) => scrollToSection(e, 'projects')}>
-          <FaBriefcase className="bot-nav-icon" />
-          <span className="bot-nav-text">Projects</span>
-        </a>
-        <a href="#skills" className="bot-nav-item" onClick={(e) => scrollToSection(e, 'skills')}>
-          <FaCode className="bot-nav-icon" />
-          <span className="bot-nav-text">Skills</span>
-        </a>
+    <nav className="dock" aria-label="Open apps">
+      <div className="dock__inner">
+        {ITEMS.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            className={`dock__item${state.open[item.id] ? ' dock__item--open' : ''}`}
+            onClick={() => open(item.id)}
+            aria-label={item.label}
+            aria-pressed={!!state.open[item.id]}
+          >
+            <span className="dock__icon">{item.icon}</span>
+            <span className="dock__tip">{item.label}</span>
+          </button>
+        ))}
       </div>
-    </div>
+    </nav>
   );
 }
 

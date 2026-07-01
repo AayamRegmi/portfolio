@@ -1,0 +1,109 @@
+.oswin {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  border: 2.5px solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  min-width: 320px;
+  min-height: 220px;
+}
+.oswin--focused {
+  box-shadow: var(--shadow-lg);
+}
+.oswin--mobile {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+}
+.oswin--max { border-radius: 0; }
+
+.oswin__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 6px 6px 14px;
+  background: var(--paper-alt);
+  border-bottom: 2.5px solid var(--ink);
+  cursor: grab;
+  flex: none;
+  user-select: none;
+}
+.oswin--mobile .oswin__bar,
+.oswin--max .oswin__bar { cursor: default; }
+.is-dragging .oswin__bar { cursor: grabbing; }
+
+.oswin__title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #4a463c;
+  letter-spacing: 0.2px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.oswin__title-icon { display: inline-flex; font-size: 13px; color: var(--accent-strong); }
+
+/* ---- Windows-style title bar controls (top-right) ---- */
+.oswin__ctrls { display: flex; align-items: center; gap: 2px; flex: none; }
+.wbtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 26px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #4a463c;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+.wbtn:hover { background: rgba(26, 26, 26, 0.1); }
+.wbtn--min { align-items: flex-end; padding-bottom: 6px; } /* the minimize glyph sits low */
+.wbtn--close:hover { background: #E11D2A; color: #fff; }
+
+/* ---- window body ---- */
+.oswin__body {
+  flex: 1;
+  overflow: auto;
+  padding: 22px;
+}
+.oswin--mobile .oswin__body { padding-bottom: 88px; } /* clear the dock */
+
+/* ---- resize grips (all edges + corners) ---- */
+.oswin__grip { position: absolute; z-index: 3; }
+.oswin__grip--n { top: -3px; left: 10px; right: 10px; height: 8px; cursor: ns-resize; }
+.oswin__grip--s { bottom: -3px; left: 10px; right: 10px; height: 8px; cursor: ns-resize; }
+.oswin__grip--e { right: -3px; top: 10px; bottom: 10px; width: 8px; cursor: ew-resize; }
+.oswin__grip--w { left: -3px; top: 10px; bottom: 10px; width: 8px; cursor: ew-resize; }
+.oswin__grip--ne { top: -3px; right: -3px; width: 16px; height: 16px; cursor: nesw-resize; }
+.oswin__grip--sw { bottom: -3px; left: -3px; width: 16px; height: 16px; cursor: nesw-resize; }
+.oswin__grip--nw { top: -3px; left: -3px; width: 16px; height: 16px; cursor: nwse-resize; }
+.oswin__grip--se { bottom: -3px; right: -3px; width: 16px; height: 16px; cursor: nwse-resize; }
+
+/* visible hint in the bottom-right corner */
+.oswin__grip--se::after {
+  content: '';
+  position: absolute;
+  right: 3px; bottom: 3px;
+  width: 12px; height: 12px;
+  background:
+    linear-gradient(135deg, transparent 0 50%, var(--ink) 50% 58%, transparent 58% 70%, var(--ink) 70% 78%, transparent 78%);
+  opacity: 0.5;
+}
+.oswin__grip--se:hover::after { opacity: 0.85; }
+
+/* keep drags smooth over the embedded PDF / iframes */
+.is-dragging { cursor: grabbing; user-select: none; }
+.is-dragging iframe,
+.is-dragging object,
+.is-dragging embed { pointer-events: none; }
